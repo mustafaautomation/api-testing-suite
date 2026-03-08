@@ -1,0 +1,43 @@
+name: API Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    - cron: '0 1 * * *'  # Nightly at 1 AM UTC
+
+jobs:
+  test:
+    name: API Test Suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run all API tests
+        run: npm test
+        env:
+          BASE_URL:       ${{ vars.BASE_URL || 'https://reqres.in' }}
+          TEST_EMAIL:     ${{ vars.TEST_EMAIL }}
+          TEST_PASSWORD:  ${{ secrets.TEST_PASSWORD }}
+
+      - name: Upload HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-test-report-${{ github.run_id }}
+          path: reports/
+          retention-days: 30

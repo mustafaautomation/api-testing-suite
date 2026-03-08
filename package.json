@@ -1,0 +1,49 @@
+{
+  "name": "api-testing-suite",
+  "version": "1.0.0",
+  "description": "Production-grade REST API testing suite — SuperTest + Jest + Zod schema validation",
+  "author": "Quvantic <info@quvantic.com> (https://quvantic.com)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mustafaautomation/api-testing-suite.git"
+  },
+  "homepage": "https://github.com/mustafaautomation/api-testing-suite#readme",
+  "bugs": {
+    "url": "https://github.com/mustafaautomation/api-testing-suite/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "jest",
+    "test:auth": "jest tests/auth.test.ts",
+    "test:users": "jest tests/users.test.ts",
+    "test:contracts": "jest tests/contracts.test.ts",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watch",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "format": "prettier --write \"**/*.ts\"",
+    "format:check": "prettier --check \"**/*.ts\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "@types/supertest": "^6.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "dotenv": "^16.4.5",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "jest": "^29.7.0",
+    "jest-html-reporter": "^3.10.0",
+    "jest-junit": "^16.0.0",
+    "prettier": "^3.3.0",
+    "supertest": "^7.0.0",
+    "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.4.0",
+    "zod": "^3.23.0"
+  }
+}
