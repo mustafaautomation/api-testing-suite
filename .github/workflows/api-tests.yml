@@ -2,11 +2,14 @@ name: API Tests
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main]
   pull_request:
-    branches: [main, develop]
+    branches: [main]
   schedule:
-    - cron: '0 1 * * *'  # Nightly at 1 AM UTC
+    - cron: '0 1 * * *'
+
+permissions:
+  contents: read
 
 jobs:
   test:
@@ -16,27 +19,36 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '20'
-          cache: 'npm'
+          cache: npm
 
       - name: Install dependencies
         run: npm ci
 
+      - name: Lint check
+        run: npm run lint
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Type check
+        run: npm run typecheck
+
       - name: Run all API tests
         run: npm test
         env:
-          BASE_URL:       ${{ vars.BASE_URL || 'https://reqres.in' }}
-          TEST_EMAIL:     ${{ vars.TEST_EMAIL }}
-          TEST_PASSWORD:  ${{ secrets.TEST_PASSWORD }}
+          BASE_URL: ${{ vars.BASE_URL || 'https://dummyjson.com' }}
+          TEST_USERNAME: ${{ vars.TEST_USERNAME || 'emilys' }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD || 'emilyspass' }}
 
       - name: Upload HTML report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: api-test-report-${{ github.run_id }}
           path: reports/
