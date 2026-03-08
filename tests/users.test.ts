@@ -1,4 +1,4 @@
-import { apiClient } from '../src/client/ApiClient';
+import { createApiClient } from '../src/client/ApiClient';
 import {
   UserListResponseSchema,
   UserSchema,
@@ -9,9 +9,15 @@ import { TEST_CREDENTIALS, NEW_USER, VALID_USER_IDS } from '../src/data/testData
 import { assertSchema, assertJsonHeaders } from '../src/utils/assertions';
 
 describe('Users API', () => {
+  const apiClient = createApiClient();
+
   beforeAll(async () => {
     const res = await apiClient.post('/auth/login', TEST_CREDENTIALS.valid);
     apiClient.withToken(res.body.accessToken);
+  });
+
+  afterAll(() => {
+    apiClient.clearToken();
   });
 
   describe('GET /users', () => {
@@ -111,7 +117,7 @@ describe('Users API', () => {
 
   describe('DELETE /users/:id', () => {
     it('should delete user and return 200 with isDeleted flag', async () => {
-      const res = await apiClient.delete('/users/1');
+      const res = await apiClient.delete('/users/100');
 
       expect(res.status).toBe(200);
       expect(res.body.isDeleted).toBe(true);

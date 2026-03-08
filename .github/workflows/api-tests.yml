@@ -19,10 +19,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: npm
@@ -39,16 +39,19 @@ jobs:
       - name: Type check
         run: npm run typecheck
 
+      - name: Create reports directory
+        run: mkdir -p reports
+
       - name: Run all API tests
-        run: npm test
+        run: npm run test:ci
         env:
           BASE_URL: ${{ vars.BASE_URL || 'https://dummyjson.com' }}
           TEST_USERNAME: ${{ vars.TEST_USERNAME || 'emilys' }}
-          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD || 'emilyspass' }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
 
       - name: Upload HTML report
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: api-test-report-${{ github.run_id }}
           path: reports/

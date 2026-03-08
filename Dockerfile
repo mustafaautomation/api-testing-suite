@@ -7,4 +7,4 @@ RUN npm ci && npm cache clean --force
 COPY . .
 USER appuser
 
-CMD ["npx", "jest"]
+CMD ["npm", "test"]

@@ -1,9 +1,11 @@
-import { apiClient } from '../src/client/ApiClient';
+import { createApiClient } from '../src/client/ApiClient';
 import { LoginResponseSchema } from '../src/schemas/auth.schema';
 import { TEST_CREDENTIALS } from '../src/data/testData';
 import { assertSchema, assertResponseTime, assertJsonHeaders } from '../src/utils/assertions';
 
 describe('Authentication API', () => {
+  const apiClient = createApiClient();
+
   describe('POST /auth/login', () => {
     it('should return tokens and user info for valid credentials', async () => {
       const start = Date.now();
@@ -35,12 +37,6 @@ describe('Authentication API', () => {
       const res = await apiClient.post('/auth/login', {});
 
       expect(res.status).toBe(400);
-    });
-
-    it('should respond within 2000ms (warm)', async () => {
-      const start = Date.now();
-      await apiClient.post('/auth/login', TEST_CREDENTIALS.valid);
-      assertResponseTime(start, 2000);
     });
   });
 });

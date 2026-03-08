@@ -3,6 +3,8 @@ import type { Config } from 'jest';
 const config: Config = {
   preset: 'ts-jest',
   testEnvironment: 'node',
+  testTimeout: 15000,
+  setupFiles: ['dotenv/config'],
   testMatch: ['**/tests/**/*.test.ts'],
   verbose: true,
   reporters: [

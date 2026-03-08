@@ -19,6 +19,8 @@ export const NEW_USER = {
   firstName: 'Muhammad',
   lastName: 'Mustafa',
   age: 30,
+  email: 'muhammad@example.com',
+  username: 'muhammadm',
 };
 
 export const VALID_USER_IDS = [1, 2, 3, 4, 5];

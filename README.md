@@ -43,16 +43,17 @@ API testing requires more than just status code checks. This suite demonstrates:
 ```
 $ npm test
 
- PASS  tests/auth.test.ts (5 tests)
- PASS  tests/users.test.ts (14 tests)
- PASS  tests/contracts.test.ts (16 tests)
+ PASS  tests/auth.test.ts (4 tests)
+ PASS  tests/users.test.ts (15 tests)
+ PASS  tests/contracts.test.ts (15 tests)
+ PASS  tests/client.test.ts (3 tests)
 
-Test Suites: 3 passed, 3 total
-Tests:       35 passed, 35 total
-Time:        6.2s
+Test Suites: 4 passed, 4 total
+Tests:       37 passed, 37 total
+Time:        8.5s
 ```
 
-> **35 integration tests** covering auth, CRUD, contracts, schemas, headers, and SLOs.
+> **37 tests** covering auth, CRUD, contracts, schemas, headers, SLOs, and client unit tests.
 
 ---
 
@@ -115,10 +116,11 @@ npm run test:coverage
 
 | Suite | Tests | What it covers |
 |---|---|---|
-| `auth.test.ts` | 5 | Login, error states, missing fields, SLO |
-| `users.test.ts` | 14 | CRUD, pagination, data-driven, 404 handling |
-| `contracts.test.ts` | 16 | Schemas, headers, SLOs, status codes |
-| **Total** | **35** | |
+| `auth.test.ts` | 4 | Login, error states, missing fields |
+| `users.test.ts` | 15 | CRUD, pagination, data-driven, 404 handling |
+| `contracts.test.ts` | 15 | Schemas, headers, SLOs, status codes |
+| `client.test.ts` | 3 | ApiClient factory, chaining, token management |
+| **Total** | **37** | |
 
 ---
 
@@ -146,6 +148,27 @@ it.each(VALID_USER_IDS)('should return user %i', async (id) => {
 });
 ```
 
+### Factory Pattern with `createApiClient()`
+
+```typescript
+const apiClient = createApiClient(); // each test suite gets its own isolated client
+apiClient.withToken(token).enableRetry().enableLogging();
+```
+
+### Retry with Exponential Backoff
+
+```typescript
+const client = createApiClient().enableRetry({ attempts: 3, baseDelay: 500 });
+// Retries on 5xx and network errors; never retries 4xx (expected in tests)
+```
+
+### Request Logging
+
+```typescript
+const client = createApiClient().enableLogging();
+// Logs to stderr: [API] GET /users → 200 (142ms)
+```
+
 ### Response Time SLOs
 
 ```typescript
@@ -161,7 +184,7 @@ assertResponseTime(start, 500); // fails if > 500ms
 The GitHub Actions workflow:
 
 1. Runs lint, format, type check on every push/PR
-2. Executes all 35 API tests
+2. Executes all 37 tests
 3. Uploads HTML + JUnit reports as artifacts
 4. Nightly scheduled run at 1 AM UTC
 
@@ -194,7 +217,8 @@ api-testing-suite/
 ├── tests/
 │   ├── auth.test.ts              # Login, register, error handling
 │   ├── users.test.ts             # Full CRUD + data-driven tests
-│   └── contracts.test.ts         # Schema, headers, SLO validation
+│   ├── contracts.test.ts         # Schema, headers, SLO validation
+│   └── client.test.ts            # ApiClient unit tests
 ├── CONTRIBUTING.md
 ├── SECURITY.md
 ├── Dockerfile
@@ -211,6 +235,7 @@ cd api-testing-suite
 npm install
 cp .env.example .env
 npm test              # Run all API tests
+npm run test:ci       # Run tests in CI mode (--runInBand --forceExit)
 npm run typecheck     # Type checking
 npm run lint          # ESLint
 npm run format:check  # Prettier

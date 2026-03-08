@@ -3,4 +3,5 @@ reports
 coverage
 .git
 .env
-*.md
+README.md
+CHANGELOG.md

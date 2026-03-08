@@ -29,5 +29,8 @@ export function assertResponseTime(startTime: number, maxMs: number = 500): void
  * Asserts standard JSON API headers are present.
  */
 export function assertJsonHeaders(headers: Record<string, string>): void {
-  expect(headers['content-type']).toMatch(/application\/json/);
+  const contentType = headers['content-type'] || '';
+  if (!/application\/json/.test(contentType)) {
+    throw new Error(`Expected JSON content-type, got: "${contentType}"`);
+  }
 }

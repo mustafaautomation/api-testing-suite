@@ -4,6 +4,7 @@
   "description": "Production-grade REST API testing suite — SuperTest + Jest + Zod schema validation",
   "author": "Quvantic <info@quvantic.com> (https://quvantic.com)",
   "license": "MIT",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/mustafaautomation/api-testing-suite.git"
@@ -17,6 +18,7 @@
   },
   "scripts": {
     "test": "jest",
+    "test:ci": "jest --runInBand --forceExit",
     "test:auth": "jest tests/auth.test.ts",
     "test:users": "jest tests/users.test.ts",
     "test:contracts": "jest tests/contracts.test.ts",
