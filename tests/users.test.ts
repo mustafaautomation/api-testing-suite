@@ -13,6 +13,9 @@ describe('Users API', () => {
 
   beforeAll(async () => {
     const res = await apiClient.post('/auth/login', TEST_CREDENTIALS.valid);
+    if (res.status !== 200 || !res.body.accessToken) {
+      throw new Error(`Login failed: ${res.status} ${JSON.stringify(res.body)}`);
+    }
     apiClient.withToken(res.body.accessToken);
   });
 
@@ -52,7 +55,8 @@ describe('Users API', () => {
 
       const ids1 = p1.body.users.map((u: { id: number }) => u.id);
       const ids2 = p2.body.users.map((u: { id: number }) => u.id);
-      expect(ids1).not.toEqual(expect.arrayContaining(ids2));
+      const overlap = ids1.filter((id: number) => ids2.includes(id));
+      expect(overlap).toHaveLength(0);
     });
   });
 
@@ -92,7 +96,7 @@ describe('Users API', () => {
       assertSchema(CreateUserResponseSchema, res.body);
       expect(res.body.firstName).toBe(NEW_USER.firstName);
       expect(res.body.lastName).toBe(NEW_USER.lastName);
-      expect(res.body.id).toBeDefined();
+      expect(res.body.id).toBeGreaterThan(0);
     });
   });
 

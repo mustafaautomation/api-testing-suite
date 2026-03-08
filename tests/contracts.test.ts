@@ -6,7 +6,7 @@
 import { createApiClient } from '../src/client/ApiClient';
 import { UserListResponseSchema, UserSchema } from '../src/schemas/user.schema';
 import { LoginResponseSchema } from '../src/schemas/auth.schema';
-import { TEST_CREDENTIALS } from '../src/data/testData';
+import { TEST_CREDENTIALS, NEW_USER } from '../src/data/testData';
 import { assertSchema, assertResponseTime } from '../src/utils/assertions';
 
 const SLO_MS = 1000;
@@ -26,7 +26,7 @@ describe('Contract Tests', () => {
     });
 
     it('POST /users/add — responds with JSON content-type', async () => {
-      const res = await apiClient.post('/users/add', { firstName: 'Test', lastName: 'User' });
+      const res = await apiClient.post('/users/add', NEW_USER);
       expect(res.headers['content-type']).toMatch(/application\/json/);
     });
   });
@@ -76,7 +76,7 @@ describe('Contract Tests', () => {
     it('GET  /users/999999 → 404', async () =>
       expect((await apiClient.get('/users/999999')).status).toBe(404));
     it('POST /users/add    → 201', async () =>
-      expect((await apiClient.post('/users/add', { firstName: 'x' })).status).toBe(201));
+      expect((await apiClient.post('/users/add', NEW_USER)).status).toBe(201));
     it('PUT  /users/2      → 200', async () =>
       expect((await apiClient.put('/users/2', { firstName: 'x' })).status).toBe(200));
     it('DEL  /users/2      → 200', async () =>

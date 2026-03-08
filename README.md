@@ -46,14 +46,14 @@ $ npm test
  PASS  tests/auth.test.ts (4 tests)
  PASS  tests/users.test.ts (15 tests)
  PASS  tests/contracts.test.ts (15 tests)
- PASS  tests/client.test.ts (3 tests)
+ PASS  tests/client.test.ts (7 tests)
 
 Test Suites: 4 passed, 4 total
-Tests:       37 passed, 37 total
+Tests:       41 passed, 41 total
 Time:        8.5s
 ```
 
-> **37 tests** covering auth, CRUD, contracts, schemas, headers, SLOs, and client unit tests.
+> **41 tests** covering auth, CRUD, contracts, schemas, headers, SLOs, and client unit tests.
 
 ---
 
@@ -84,7 +84,7 @@ npm run test:coverage
 ```
 ┌─────────────────────────────────────────────────────┐
 │                   Test Suites                        │
-│      auth.test.ts │ users.test.ts │ contracts.test.ts│
+│ auth │ users │ contracts │ client (unit)        │
 ├─────────────────────────────────────────────────────┤
 │                   Shared Layer                       │
 │   ApiClient │ Assertions │ Schemas │ Test Data       │
@@ -119,8 +119,8 @@ npm run test:coverage
 | `auth.test.ts` | 4 | Login, error states, missing fields |
 | `users.test.ts` | 15 | CRUD, pagination, data-driven, 404 handling |
 | `contracts.test.ts` | 15 | Schemas, headers, SLOs, status codes |
-| `client.test.ts` | 3 | ApiClient factory, chaining, token management |
-| **Total** | **37** | |
+| `client.test.ts` | 7 | ApiClient factory, chaining, retry, logging |
+| **Total** | **41** | |
 
 ---
 
@@ -184,7 +184,7 @@ assertResponseTime(start, 500); // fails if > 500ms
 The GitHub Actions workflow:
 
 1. Runs lint, format, type check on every push/PR
-2. Executes all 37 tests
+2. Executes all 41 tests
 3. Uploads HTML + JUnit reports as artifacts
 4. Nightly scheduled run at 1 AM UTC
 

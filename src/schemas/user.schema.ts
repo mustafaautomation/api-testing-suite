@@ -31,3 +31,4 @@ export const UpdateUserResponseSchema = z.object({
 export type User = z.infer<typeof UserSchema>;
 export type UserListResponse = z.infer<typeof UserListResponseSchema>;
 export type CreateUserResponse = z.infer<typeof CreateUserResponseSchema>;
+export type UpdateUserResponse = z.infer<typeof UpdateUserResponseSchema>;
