@@ -1,10 +1,10 @@
-import { ZodSchema } from 'zod';
+import type { ZodType } from 'zod';
 
 /**
  * Validates a response body against a Zod schema.
  * Logs schema errors on failure for easy debugging.
  */
-export function assertSchema<T>(schema: ZodSchema<T>, body: unknown): T {
+export function assertSchema<T>(schema: ZodType<T>, body: unknown): T {
   const result = schema.safeParse(body);
   if (!result.success) {
     const issues = result.error.issues
