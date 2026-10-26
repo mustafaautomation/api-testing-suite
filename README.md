@@ -6,7 +6,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6.svg?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg?logo=docker&logoColor=white)](Dockerfile)
 
-Production-grade REST API testing suite built with SuperTest, Jest, and Zod schema validation. Targets the [DummyJSON](https://dummyjson.com) API as a reference implementation.
+REST API testing suite built with SuperTest, Jest and Zod schema validation. Targets the [DummyJSON](https://dummyjson.com) API as a reference implementation.
 
 ---
 
@@ -43,17 +43,18 @@ API testing requires more than just status code checks. This suite demonstrates:
 ```
 $ npm test
 
- PASS  tests/auth.test.ts (4 tests)
- PASS  tests/users.test.ts (15 tests)
- PASS  tests/contracts.test.ts (15 tests)
- PASS  tests/client.test.ts (7 tests)
-
-Test Suites: 4 passed, 4 total
-Tests:       41 passed, 41 total
-Time:        8.5s
+PASS tests/client.test.ts
+PASS tests/auth.test.ts
+PASS tests/search.test.ts
+PASS tests/edge-cases.test.ts
+PASS tests/contracts.test.ts
+PASS tests/users.test.ts
+PASS tests/products.test.ts
+Test Suites: 7 passed, 7 total
+Tests:       75 passed, 75 total
 ```
 
-> **41 tests** covering auth, CRUD, contracts, schemas, headers, SLOs, and client unit tests.
+> **75 tests** covering auth, users and products CRUD, search, edge cases, contracts, schemas, headers, SLOs, and client unit tests.
 
 ---
 
@@ -118,9 +119,12 @@ npm run test:coverage
 |---|---|---|
 | `auth.test.ts` | 4 | Login, error states, missing fields |
 | `users.test.ts` | 15 | CRUD, pagination, data-driven, 404 handling |
+| `products.test.ts` | 15 | Products CRUD, categories, pagination |
+| `search.test.ts` | 8 | User and product search and filters |
+| `edge-cases.test.ts` | 11 | Pagination boundaries, invalid endpoints, concurrent requests, body validation |
 | `contracts.test.ts` | 15 | Schemas, headers, SLOs, status codes |
 | `client.test.ts` | 7 | ApiClient factory, chaining, retry, logging |
-| **Total** | **41** | |
+| **Total** | **75** | |
 
 ---
 
@@ -184,7 +188,7 @@ assertResponseTime(start, 500); // fails if > 500ms
 The GitHub Actions workflow:
 
 1. Runs lint, format, type check on every push/PR
-2. Executes all 41 tests
+2. Executes all 75 tests
 3. Uploads HTML + JUnit reports as artifacts
 4. Nightly scheduled run at 1 AM UTC
 
@@ -217,6 +221,9 @@ api-testing-suite/
 ├── tests/
 │   ├── auth.test.ts              # Login, register, error handling
 │   ├── users.test.ts             # Full CRUD + data-driven tests
+│   ├── products.test.ts          # Products CRUD and categories
+│   ├── search.test.ts            # Search and filters
+│   ├── edge-cases.test.ts        # Boundaries and error handling
 │   ├── contracts.test.ts         # Schema, headers, SLO validation
 │   └── client.test.ts            # ApiClient unit tests
 ├── CONTRIBUTING.md
