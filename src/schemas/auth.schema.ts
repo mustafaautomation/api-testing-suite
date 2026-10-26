@@ -5,7 +5,7 @@ export const LoginResponseSchema = z.object({
   refreshToken: z.string().min(1),
   id: z.number(),
   username: z.string(),
-  email: z.string().email(),
+  email: z.email(),
   firstName: z.string(),
   lastName: z.string(),
 });

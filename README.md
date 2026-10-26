@@ -2,7 +2,7 @@
 
 [![API Tests](https://github.com/mustafaautomation/api-testing-suite/actions/workflows/api-tests.yml/badge.svg)](https://github.com/mustafaautomation/api-testing-suite/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Node.js](https://img.shields.io/badge/Node.js-18+-339933.svg?logo=node.js&logoColor=white)](https://nodejs.org)
+[![Node.js](https://img.shields.io/badge/Node.js-24+-339933.svg?logo=node.js&logoColor=white)](https://nodejs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6.svg?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg?logo=docker&logoColor=white)](Dockerfile)
 
@@ -43,18 +43,19 @@ API testing requires more than just status code checks. This suite demonstrates:
 ```
 $ npm test
 
-PASS tests/client.test.ts
-PASS tests/auth.test.ts
-PASS tests/search.test.ts
-PASS tests/edge-cases.test.ts
-PASS tests/contracts.test.ts
 PASS tests/users.test.ts
 PASS tests/products.test.ts
-Test Suites: 7 passed, 7 total
-Tests:       75 passed, 75 total
+PASS tests/edge-cases.test.ts
+PASS tests/contracts.test.ts
+PASS tests/search.test.ts
+PASS tests/auth.test.ts
+PASS tests/client.test.ts
+PASS tests/schemas.test.ts
+Test Suites: 8 passed, 8 total
+Tests:       88 passed, 88 total
 ```
 
-> **75 tests** covering auth, users and products CRUD, search, edge cases, contracts, schemas, headers, SLOs, and client unit tests.
+> **88 tests**: 75 live tests against DummyJSON (auth, users and products CRUD, search, edge cases, contracts, headers, SLOs, client behaviour) plus 13 offline tests that prove the schemas and assertion helpers reject bad data.
 
 ---
 
@@ -105,9 +106,9 @@ npm run test:coverage
 | Tool | Purpose |
 |---|---|
 | [SuperTest](https://github.com/ladjs/supertest) | HTTP assertions |
-| [Jest](https://jestjs.io) | Test runner + HTML/JUnit reporters |
-| [Zod](https://zod.dev) | Schema validation |
-| [TypeScript](https://typescriptlang.org) | Type safety |
+| [Jest](https://jestjs.io) 30 | Test runner + HTML/JUnit reporters |
+| [Zod](https://zod.dev) 4 | Schema validation |
+| [TypeScript](https://typescriptlang.org) 6.0 on Node.js 24 | Type safety |
 | GitHub Actions | CI pipeline with nightly schedule |
 | [DummyJSON](https://dummyjson.com) | Target REST API |
 
@@ -124,7 +125,8 @@ npm run test:coverage
 | `edge-cases.test.ts` | 11 | Pagination boundaries, invalid endpoints, concurrent requests, body validation |
 | `contracts.test.ts` | 15 | Schemas, headers, SLOs, status codes |
 | `client.test.ts` | 7 | ApiClient factory, chaining, retry, logging |
-| **Total** | **75** | |
+| `schemas.test.ts` | 13 | Offline: schemas and helpers reject malformed payloads, name the failing field |
+| **Total** | **88** | |
 
 ---
 
@@ -188,7 +190,7 @@ assertResponseTime(start, 500); // fails if > 500ms
 The GitHub Actions workflow:
 
 1. Runs lint, format, type check on every push/PR
-2. Executes all 75 tests
+2. Executes all 88 tests on Node 24
 3. Uploads HTML + JUnit reports as artifacts
 4. Nightly scheduled run at 1 AM UTC
 
@@ -225,7 +227,8 @@ api-testing-suite/
 │   ├── search.test.ts            # Search and filters
 │   ├── edge-cases.test.ts        # Boundaries and error handling
 │   ├── contracts.test.ts         # Schema, headers, SLO validation
-│   └── client.test.ts            # ApiClient unit tests
+│   ├── client.test.ts            # ApiClient unit tests
+│   └── schemas.test.ts           # Offline negative schema/helper tests
 ├── CONTRIBUTING.md
 ├── SECURITY.md
 ├── Dockerfile

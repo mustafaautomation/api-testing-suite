@@ -4,9 +4,9 @@ export const UserSchema = z.object({
   id: z.number().positive(),
   firstName: z.string().min(1),
   lastName: z.string().min(1),
-  email: z.string().email(),
+  email: z.email(),
   username: z.string().min(1),
-  image: z.string().url(),
+  image: z.url(),
 });
 
 export const UserListResponseSchema = z.object({
